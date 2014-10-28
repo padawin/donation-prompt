@@ -6,6 +6,8 @@
 		"start": "node ./bin/www"
 	},
 	"dependencies": {
-		"qunitjs": "~1.15.0"
+		"qunitjs": "~1.15.0",
+		"jquery": "2",
+		"mustache": "0.8.2"
 	}
 }

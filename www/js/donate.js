@@ -20,6 +20,20 @@
 		});
 	}
 
+	function _startStats(statsUrl) {
+		setInterval(function() {
+			var statsContainer = $('.prompt-stats .value', this.parent);
+			if (statsContainer.length == 1) {
+				$.ajax({
+					url: statsUrl
+				})
+				.done(function(data) {
+					statsContainer.html(data);
+				});
+			}
+		}.bind(this), 1000);
+	}
+
 	function _build(parent, templateUrl, translations) {
 		var that = this;
 		if (_templates[templateUrl]) {
@@ -40,10 +54,13 @@
 	var donate = function(parent, options) {
 		translations || _loadTranslations(options.translationsUrl);
 		var locale = options.locale || 'en_GB';
+
+		this.parent = parent;
 		this.locale = locale;
 
 		var templateUrl = options.templateUrl || '';
 		_build.apply(this, [parent, templateUrl]);
+		_startStats.apply(this, [options.statsUrl]);
 	};
 
 	window.Donate = donate;

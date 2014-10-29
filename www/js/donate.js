@@ -42,8 +42,8 @@
 		});
 	}
 
-	var donate = function(parent, options, tsl) {
-		translations = tsl;
+	var donate = function(parent, options) {
+		translations || _loadTranslations(options.translationsUrl);
 		var locale = options.locale || 'en_GB';
 		this.locale = locale;
 

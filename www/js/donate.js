@@ -21,8 +21,9 @@
 	}
 
 	function _build(parent, templateUrl, translations) {
+		var that = this;
 		if (_templates[templateUrl]) {
-			_loadTemplate.apply(this, [parent, _templates[templateUrl]]);
+			_loadTemplate.apply(that, [parent, _templates[templateUrl]]);
 		}
 		else {
 			$.ajax({
@@ -31,7 +32,7 @@
 			})
 			.done(function(tpl) {
 				_templates[templateUrl] = tpl;
-				_loadTemplate.apply(this, [parent, _templates[templateUrl]]);
+				_loadTemplate.apply(that, [parent, _templates[templateUrl]]);
 			});
 		}
 	}

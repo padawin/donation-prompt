@@ -20,7 +20,7 @@
 		});
 	}
 
-	function _build(parent, templateUrl) {
+	function _build(parent, templateUrl, translations) {
 		if (!_templates[templateUrl]) {
 			$.ajax({
 				url: templateUrl,

@@ -1,9 +1,11 @@
 (function(){
 	var template, translations;
 
-	function _loadTemplate(parent, template, data) {
-		data.translations = translations;
-		var html = Mustache.to_html(template, data);
+	function _loadTemplate(parent, template) {
+		var html = Mustache.to_html(
+			template,
+			{locale: this.locale, translations: translations[this.locale]}
+		);
 		$(parent).html(html);
 	}
 
@@ -18,28 +20,20 @@
 		});
 	}
 
-	function _build(parent, templateUrl, dataUrl, translations) {
-		$.ajax({
-			url: dataUrl
-		})
-		.error(function(e) {
-			console.log(e);
-		})
-		.done(function(data) {
-			if (!template) {
-				$.ajax({
-					url: templateUrl,
-					dataType: 'html'
-				})
-				.done(function(tpl) {
-					template = tpl;
-					_loadTemplate(parent, template, data);
-				});
-			}
-			else {
-				_loadTemplate(parent, template, data);
-			}
-		});
+	function _build(parent, templateUrl) {
+		if (!template) {
+			$.ajax({
+				url: templateUrl,
+				dataType: 'html'
+			})
+			.done(function(tpl) {
+				template = tpl;
+				_loadTemplate.apply(this, [parent, template]);
+			});
+		}
+		else {
+			_loadTemplate.apply(this, [parent, template]);
+		}
 	}
 
 	var donate = function(parent, options) {
@@ -48,7 +42,7 @@
 		this.locale = locale;
 
 		var templateUrl = options.templateUrl || '';
-		_build.apply(this, [parent, templateUrl, options.dataUrl]);
+		_build.apply(this, [parent, templateUrl]);
 	};
 
 	window.Donate = donate;

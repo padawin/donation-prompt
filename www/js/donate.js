@@ -21,7 +21,10 @@
 	}
 
 	function _build(parent, templateUrl, translations) {
-		if (!_templates[templateUrl]) {
+		if (_templates[templateUrl]) {
+			_loadTemplate.apply(this, [parent, _templates[templateUrl]]);
+		}
+		else {
 			$.ajax({
 				url: templateUrl,
 				dataType: 'html'
@@ -30,9 +33,6 @@
 				_templates[templateUrl] = tpl;
 				_loadTemplate.apply(this, [parent, _templates[templateUrl]]);
 			});
-		}
-		else {
-			_loadTemplate.apply(this, [parent, template]);
 		}
 	}
 

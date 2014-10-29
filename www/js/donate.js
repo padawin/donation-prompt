@@ -1,5 +1,5 @@
 (function(){
-	var template, translations;
+	var _templates = {}, translations;
 
 	function _loadTemplate(parent, template) {
 		var html = Mustache.to_html(
@@ -21,14 +21,14 @@
 	}
 
 	function _build(parent, templateUrl) {
-		if (!template) {
+		if (!_templates[templateUrl]) {
 			$.ajax({
 				url: templateUrl,
 				dataType: 'html'
 			})
 			.done(function(tpl) {
-				template = tpl;
-				_loadTemplate.apply(this, [parent, template]);
+				_templates[templateUrl] = tpl;
+				_loadTemplate.apply(this, [parent, _templates[templateUrl]]);
 			});
 		}
 		else {

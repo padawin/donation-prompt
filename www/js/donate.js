@@ -33,6 +33,9 @@
 
 	var donate = function(parent, options, tsl) {
 		translations = tsl;
+		var locale = options.locale || 'en_GB';
+		this.locale = locale;
+
 		var templateUrl = options.templateUrl || '';
 		_build.apply(this, [parent, templateUrl, options.dataUrl]);
 	};

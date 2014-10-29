@@ -7,6 +7,17 @@
 		$(parent).html(html);
 	}
 
+	function _loadTranslations(url) {
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			async: false,
+			complete: function(data) {
+				translations = JSON.parse(data.responseText);
+			}
+		});
+	}
+
 	function _build(parent, templateUrl, dataUrl, translations) {
 		$.ajax({
 			url: dataUrl

@@ -12,10 +12,10 @@
 	function _loadTranslations(url) {
 		$.ajax({
 			url: url,
-			dataType: 'json',
+			dataType: 'jsonp',
 			async: false,
-			complete: function(data) {
-				translations = JSON.parse(data.responseText);
+			complete: function(json) {
+				translations = json.responseJSON;
 			}
 		});
 	}

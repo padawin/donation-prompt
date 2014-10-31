@@ -1,4 +1,6 @@
 var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var donate = require('./modules/donate');
 
 /**
@@ -70,7 +72,10 @@ app.get('/donation', function (req, res) {
 	}
 });
 
-var server = app.listen(3000, function () {
+io.on('connection', function(socket) {
+});
+
+var server = http.listen(3000, function () {
 
 	var host = server.address().address,
 		port = server.address().port;

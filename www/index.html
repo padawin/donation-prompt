@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Just Giving test</title>
+		<script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
 		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="bower_components/mustache/mustache.js"></script>
 		<script type="text/javascript" src="js/donate.js"></script>
@@ -15,6 +16,7 @@
 				$('#prompt'),
 				{
 					locale: 'en_GB',
+					socketUrl: 'http://127.0.0.1:3000',
 					templateUrl: 'templates/template-llama.html',
 					cause: 'llama',
 					donationUrl: 'http://127.0.0.1:3000/donation',
@@ -25,6 +27,7 @@
 				$('#prompt-cancer-fr'),
 				{
 					locale: 'fr_FR',
+					socketUrl: 'http://127.0.0.1:3000',
 					templateUrl: 'templates/template-cancer.html',
 					cause: 'cancer',
 					donationUrl: 'http://127.0.0.1:3000/donation',
@@ -35,6 +38,7 @@
 				$('#prompt-cancer-en'),
 				{
 					locale: 'en_GB',
+					socketUrl: 'http://127.0.0.1:3000',
 					templateUrl: 'templates/template-cancer.html',
 					cause: 'cancer',
 					donationUrl: 'http://127.0.0.1:3000/donation',

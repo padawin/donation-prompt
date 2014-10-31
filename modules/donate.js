@@ -6,12 +6,12 @@ var donate = {
 	},
 
 	addDonation: function(value) {
-		if (data !== parseInt(data, 10)
-			|| data < 0) {
+		if (value != parseInt(value, 10)
+			|| value < 0) {
 			throw "Invalid donation";
 		}
 
-		donations += value;
+		donations += parseInt(value);
 	}
 };
 

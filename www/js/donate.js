@@ -1,5 +1,5 @@
 (function(){
-	var _templates = {}, translations = null;
+	var _templates = {}, translations = null, _incomingTranslations = false;
 
 	function _loadTemplate(parent, template) {
 		var html = Mustache.to_html(
@@ -9,13 +9,16 @@
 		$(parent).html(html);
 	}
 
-	function _loadTranslations(url) {
+	function _loadTranslations(url, doneCallback) {
+		_incomingTranslations = true;
 		$.ajax({
 			url: url,
 			dataType: 'jsonp',
 			async: false,
 			complete: function(json) {
 				translations = json.responseJSON;
+				_incomingTranslations = false;
+				doneCallback();
 			}
 		});
 	}
@@ -52,15 +55,28 @@
 	}
 
 	var donate = function(parent, options) {
-		translations || _loadTranslations(options.translationsUrl);
-		var locale = options.locale || 'en_GB';
+		var next = function() {
+			var locale = options.locale || 'en_GB';
 
-		this.parent = parent;
-		this.locale = locale;
+			this.parent = parent;
+			this.locale = locale;
 
-		var templateUrl = options.templateUrl || '';
-		_build.apply(this, [parent, templateUrl]);
-		_startStats.apply(this, [options.statsUrl]);
+			var templateUrl = options.templateUrl || '';
+			_build.apply(this, [parent, templateUrl]);
+			_startStats.apply(this, [options.statsUrl]);
+		}.bind(this);
+
+		if (!translations && !_incomingTranslations) {
+			_loadTranslations(options.translationsUrl, next);
+		}
+		else if (_incomingTranslations) {
+			var interval = setInterval(function() {
+				if (!_incomingTranslations) {
+					clearInterval(interval);
+					next();
+				}
+			}, 50);
+		}
 	};
 
 	window.Donate = donate;

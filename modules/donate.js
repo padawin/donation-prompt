@@ -2,7 +2,12 @@ var _donations = {};
 
 var donate = {
 	getDonations: function(cause) {
-		return _donations[cause] | 0;
+		if (_donations[cause]) {
+			return _donations[cause].length;
+		}
+		else {
+			return 0;
+		}
 	},
 
 	addDonation: function(cause, value) {
@@ -11,7 +16,11 @@ var donate = {
 			throw "Invalid donation";
 		}
 
-		_donations[cause] = (_donations[cause] | 0) + parseInt(value);
+		if (!_donations[cause]) {
+			_donations[cause] = [];
+		}
+
+		_donations[cause].push(parseInt(value));
 	}
 };
 

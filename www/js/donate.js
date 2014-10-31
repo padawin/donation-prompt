@@ -27,7 +27,8 @@
 			var statsContainer = $('.prompt-stats .value', this.parent);
 			if (statsContainer.length == 1) {
 				$.ajax({
-					url: statsUrl
+					url: statsUrl,
+					dataType: 'jsonp'
 				})
 				.done(function(data) {
 					statsContainer.html(data);

@@ -28,9 +28,10 @@
 		});
 		this.socket.emit('stats', this.cause);
 
-		$('.add-donation-button', parent).click(function(){
+		$('.donation-form', parent).submit(function(e){
 			_sendDonation.apply(this, [$('.prompt-input', parent).val()]);
 			$('.prompt-input', parent).val('');
+			e.preventDefault();
 		}.bind(this));
 	}
 

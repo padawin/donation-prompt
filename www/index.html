@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Just Giving test</title>
+<!--
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+-->
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="js/mustache.js"></script>
+		<script type="text/javascript" src="js/donate.js"></script>
+		<script type="text/javascript" src="js/translations.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			var d = new Donate(
+				$('#prompt'),
+				{
+					locale: 'en_GB',
+					templateUrl: 'template.html',
+					cause: 'cancer',
+					translationsUrl: 'http://127.0.0.1:3000/translations.json',
+					donationUrl: 'http://127.0.0.1:3000/donation',
+					statsUrl: 'http://127.0.0.1:3000/stats.json'
+				}
+			);
+			var d2 = new Donate(
+				$('#prompt-fr'),
+				{
+					locale: 'fr_FR',
+					templateUrl: 'template.html',
+					cause: 'aid',
+					translationsUrl: 'http://127.0.0.1:3000/translations.json',
+					donationUrl: 'http://127.0.0.1:3000/donation',
+					statsUrl: 'http://127.0.0.1:3000/stats.json'
+				}
+			);
+		});
+		</script>
+	</head>
+	<body>
+		<div id="prompt"></div>
+		<div id="prompt-fr"></div>
+	</body>
+</head>

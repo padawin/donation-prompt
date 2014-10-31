@@ -16,7 +16,7 @@
 	 * Private method to compile a template with the translations.
 	 * Then Starts the stats and set the events on the template.
 	 */
-	function _loadTemplate(parent, template) {
+	function _compileTemplate(parent, template) {
 		var that = this,
 			html = Mustache.to_html(
 			template,
@@ -71,7 +71,7 @@
 	function _build(parent) {
 		var that = this;
 		if (_templates[this.templateUrl]) {
-			_loadTemplate.apply(that, [parent, _templates[this.templateUrl]]);
+			_compileTemplate.apply(that, [parent, _templates[this.templateUrl]]);
 		}
 		else {
 			$.ajax({
@@ -80,7 +80,7 @@
 			})
 			.done(function(tpl) {
 				_templates[that.templateUrl] = tpl;
-				_loadTemplate.apply(that, [parent, _templates[that.templateUrl]]);
+				_compileTemplate.apply(that, [parent, _templates[that.templateUrl]]);
 			});
 		}
 	}

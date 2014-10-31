@@ -1,8 +1,8 @@
-var donations = 0;
+var _donations = 0;
 
 var donate = {
 	getDonations: function() {
-		return donations;
+		return _donations;
 	},
 
 	addDonation: function(value) {
@@ -11,7 +11,7 @@ var donate = {
 			throw "Invalid donation";
 		}
 
-		donations += parseInt(value);
+		_donations += parseInt(value);
 	}
 };
 

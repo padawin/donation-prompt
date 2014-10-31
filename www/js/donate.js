@@ -1,6 +1,21 @@
 (function(){
-	var _templates = {}, translations = null, _incomingTranslations = false;
+	/**
+	 * List of templates, for memoization purposes
+	 */
+	var _templates = {},
+		/**
+		 * List of translations
+		 */
+		translations = null,
+		/**
+		 * boolean, true if the translations have been requested
+		 */
+		_incomingTranslations = false;
 
+	/**
+	 * Private method to compile a template with the translations.
+	 * Then Starts the stats and set the events on the template.
+	 */
 	function _loadTemplate(parent, template) {
 		var that = this,
 			html = Mustache.to_html(
@@ -16,8 +31,9 @@
 	}
 
 	/**
+	 * Private method to send a donation from the value in the input.
 	 * if this fails (invalid value for example), no information can be catched,
-	 * because of jsonp
+	 * because of jsonp. Also, this must be done in GET becaus of jsonp as well.
 	 */
 	function _sendDonation(value) {
 		$.ajax({
@@ -43,6 +59,9 @@
 		});
 	}
 
+	/**
+	 * Private method to fetch the widget's stats in an interval of 10 seconds
+	 */
 	function _startStats(statsUrl) {
 		setInterval(function() {
 			var statsContainer = $('.prompt-stats .value', this.parent);
@@ -59,6 +78,9 @@
 		}.bind(this), 1000);
 	}
 
+	/**
+	 * private method which load the widget's template and build it.
+	 */
 	function _build(parent) {
 		var that = this;
 		if (_templates[this.templateUrl]) {
@@ -76,7 +98,16 @@
 		}
 	}
 
+	/**
+	 * Widget entry point.
+	 * The main process is in a local function, to be deferred if the
+	 * translations are not here yet, because they are needed to build the
+	 * template.
+	 * This way, if multiple instances of the widget are used in a page, the
+	 * translations will be loaded once only.
+	 */
 	var donate = function(parent, options) {
+		// Callback to built the widget and start the stats
 		var next = function() {
 			var locale = options.locale || 'en_GB';
 

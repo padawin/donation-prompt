@@ -1,6 +1,22 @@
 var app = require('express')();
 var donate = require('./modules/donate');
 
+/**
+ * Route to get the available translations, per locale.
+ * Return format:
+ * {
+ * 		locale1: {
+ * 			key: value,
+ * 			key: value,
+ * 			key: value
+ * 		},
+ * 		locale2: {
+ * 			key: value,
+ * 			key: value,
+ * 			key: value
+ * 		}
+ * }
+ */
 app.get('/translations.json', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
 	res.jsonp({
@@ -23,12 +39,25 @@ app.get('/translations.json', function (req, res) {
 	});
 });
 
+/**
+ * Route to get the stats for a given cause.
+ * A cause's stats is just the number of donations for the given cause
+ * Return format:
+ * int
+ */
 app.get('/stats.json', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
 	res.jsonp(donate.getDonations(req.query.cause));
 });
 
-// should be post, but POST does not work with jsonp
+/**
+ * Route to add a new donation for a given cause
+ * Return format:
+ * ['OK'] if the donation is done
+ * ['Bad value'] if the donation is invalid (status code 400)
+ *
+ * Should be post, but POST does not work with jsonp
+ */
 app.get('/donation', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
 	try {

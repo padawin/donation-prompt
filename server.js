@@ -5,14 +5,16 @@ app.get('/translations.json', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
 	res.jsonp({
 		"en_GB": {
-			"headline": "£10 could buy a llama",
+			"headline_llama": "£10 could buy a llama",
+			"headline_cancer": "£10 could help cure cancer",
 			"currency": "£",
 			"donate-alt": "Donate",
 			"fast-secure": "Donating with JustGiving is fast and secure",
 			"support": "others have supported this"
 		},
 		"fr_FR": {
-			"headline": "10€ peuvent payer un llama",
+			"headline_llama": "10€ peuvent payer un llama",
+			"headline_cancer": "10€ peuvent soigner un cancer",
 			"currency": "€",
 			"donate-alt": "Donner",
 			"fast-secure": "Donner via JustGiving est rapide et sécurisé",

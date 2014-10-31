@@ -1,5 +1,5 @@
 (function(){
-	var _templates = {}, translations;
+	var _templates = {}, translations = null;
 
 	function _loadTemplate(parent, template) {
 		var html = Mustache.to_html(

@@ -2,11 +2,32 @@
 	var _templates = {}, translations = null, _incomingTranslations = false;
 
 	function _loadTemplate(parent, template) {
-		var html = Mustache.to_html(
+		var that = this,
+			html = Mustache.to_html(
 			template,
 			{locale: this.locale, translations: translations[this.locale]}
 		);
 		$(parent).html(html);
+
+		$('.add-donation-button', parent).click(function(){
+			_sendDonation.apply(this, [$('.prompt-input', parent).val()]);
+			$('.prompt-input', parent).val('');
+		}.bind(this));
+	}
+
+	/**
+	 * if this fails (invalid value for example), no information can be catched,
+	 * because of jsonp
+	 */
+	function _sendDonation(value) {
+		$.ajax({
+			url: this.donationUrl,
+			dataType: 'jsonp',
+			data: {value: value, cause: this.cause},
+			complete: function(json) {
+				translations = json.responseJSON;
+			}
+		});
 	}
 
 	function _loadTranslations(url, doneCallback) {

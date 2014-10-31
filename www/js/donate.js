@@ -28,6 +28,7 @@
 			if (statsContainer.length == 1) {
 				$.ajax({
 					url: statsUrl,
+					data: {cause: this.cause},
 					dataType: 'jsonp'
 				})
 				.done(function(data) {
@@ -61,7 +62,10 @@
 			this.parent = parent;
 			this.locale = locale;
 
+			this.cause = options.cause || '';
+			this.donationUrl = options.donationUrl || '';
 			this.templateUrl = options.templateUrl || '';
+
 			_build.apply(this, [parent]);
 			_startStats.apply(this, [options.statsUrl]);
 		}.bind(this);

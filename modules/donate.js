@@ -1,17 +1,17 @@
-var _donations = 0;
+var _donations = {};
 
 var donate = {
-	getDonations: function() {
-		return _donations;
+	getDonations: function(cause) {
+		return _donations[cause] | 0;
 	},
 
-	addDonation: function(value) {
+	addDonation: function(cause, value) {
 		if (value != parseInt(value, 10)
 			|| value < 0) {
 			throw "Invalid donation";
 		}
 
-		_donations += parseInt(value);
+		_donations[cause] = (_donations[cause] | 0) + parseInt(value);
 	}
 };
 

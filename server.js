@@ -23,14 +23,14 @@ app.get('/translations.json', function (req, res) {
 
 app.get('/stats.json', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
-	res.jsonp(donate.getDonations());
+	res.jsonp(donate.getDonations(req.query.cause));
 });
 
 // should be post, but POST does not work with jsonp
 app.get('/donation', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
 	try {
-		donate.addDonation(req.query.value)
+		donate.addDonation(req.query.cause, req.query.value);
 		res.jsonp(['OK']);
 	}
 	catch (e) {

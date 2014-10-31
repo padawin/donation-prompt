@@ -1,4 +1,5 @@
 var app = require('express')();
+var donate = require('./modules/donate');
 
 app.get('/translations.json', function (req, res) {
 	res.set({'Content-Type': 'application/json'});
@@ -18,6 +19,24 @@ app.get('/translations.json', function (req, res) {
 			"support": "autres personnes ont supporté cette cause"
 		}
 	});
+});
+
+app.get('/stats.json', function (req, res) {
+	res.set({'Content-Type': 'application/json'});
+	res.jsonp(donate.getDonations());
+});
+
+// should be post, but POST does not work with jsonp
+app.get('/donation', function (req, res) {
+	res.set({'Content-Type': 'application/json'});
+	try {
+		donate.addDonation(req.query.value)
+		res.jsonp(['OK']);
+	}
+	catch (e) {
+		res.status(400);
+		res.jsonp(['Bad value']);
+	}
 });
 
 var server = app.listen(3000, function () {

@@ -6,7 +6,7 @@
 		/**
 		 * List of translations
 		 */
-		translations = null,
+		_translations = null,
 		/**
 		 * boolean, true if the translations have been requested
 		 */
@@ -20,7 +20,7 @@
 		var that = this,
 			html = Mustache.to_html(
 			template,
-			{locale: this.locale, translations: translations[this.locale]}
+			{locale: this.locale, translations: _translations[this.locale]}
 		);
 		$(parent).html(html);
 		_fetchStats.apply(this);
@@ -118,7 +118,7 @@
 		this.statsUrl = options.statsUrl || '';
 		this.templateUrl = options.templateUrl || '';
 
-		if (!translations && !_incomingTranslations) {
+		if (!_translations && !_incomingTranslations) {
 			throw "Translations are needed to use the widget.";
 		}
 		// The translations are here, let's proceed
@@ -146,7 +146,7 @@
 			url: url,
 			dataType: 'jsonp',
 			complete: function(json) {
-				translations = json.responseJSON;
+				_translations = json.responseJSON;
 				_incomingTranslations = false;
 			}
 		});

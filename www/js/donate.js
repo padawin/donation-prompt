@@ -103,18 +103,20 @@
 	var donate = function(parent, options) {
 		// Callback to built the widget and start the stats
 		var next = function() {
-			var locale = options.locale || 'en_GB';
-
-			this.parent = parent;
-			this.locale = locale;
-
-			this.cause = options.cause || '';
-			this.donationUrl = options.donationUrl || '';
-			this.templateUrl = options.templateUrl || '';
-
 			_build.apply(this, [parent]);
-			_startStats.apply(this, [options.statsUrl]);
+			_startStats.apply(this);
 		}.bind(this);
+
+		var locale = options.locale || 'en_GB';
+
+		// set some attributes
+		this.parent = parent;
+		this.locale = locale;
+
+		this.cause = options.cause || '';
+		this.donationUrl = options.donationUrl || '';
+		this.statsUrl = options.statsUrl || '';
+		this.templateUrl = options.templateUrl || '';
 
 		if (!translations && !_incomingTranslations) {
 			throw "Translations are needed to use the widget.";

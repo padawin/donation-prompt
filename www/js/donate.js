@@ -14,7 +14,6 @@
 		$.ajax({
 			url: url,
 			dataType: 'jsonp',
-			async: false,
 			complete: function(json) {
 				translations = json.responseJSON;
 				_incomingTranslations = false;

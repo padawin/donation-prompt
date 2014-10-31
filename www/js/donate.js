@@ -76,18 +76,35 @@
 	 * private method which load the widget's template and build it.
 	 */
 	function _build(parent) {
+		var compileCallback = function() {
+			_compileTemplate.apply(
+				this,
+				[parent, _templates[this.templateUrl]]
+			);
+		}.bind(this);
+
 		var that = this;
-		if (_templates[this.templateUrl]) {
-			_compileTemplate.apply(that, [parent, _templates[this.templateUrl]]);
+		if (_templates[this.templateUrl] !== null
+			&& _templates[this.templateUrl] !== undefined) {
+			compileCallback();
 		}
-		else {
+		else if (_templates[that.templateUrl] === null) {
+			var interval = setInterval(function() {
+				if (_templates[that.templateUrl] != null) {
+					clearInterval(interval);
+					compileCallback();
+				}
+			}, 50);
+		}
+		else if (_templates[that.templateUrl] === undefined) {
+			_templates[that.templateUrl] = null;
 			$.ajax({
 				url: this.templateUrl,
 				dataType: 'html'
 			})
 			.done(function(tpl) {
 				_templates[that.templateUrl] = tpl;
-				_compileTemplate.apply(that, [parent, _templates[that.templateUrl]]);
+				compileCallback();
 			});
 		}
 	}

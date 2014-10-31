@@ -16,13 +16,14 @@
 	 * Private method to compile a template with the translations.
 	 * Then Starts the stats and set the events on the template.
 	 */
-	function _loadTemplate(parent, template) {
+	function _compileTemplate(parent, template) {
 		var that = this,
 			html = Mustache.to_html(
 			template,
 			{locale: this.locale, translations: translations[this.locale]}
 		);
 		$(parent).html(html);
+		_fetchStats.apply(this);
 
 		$('.add-donation-button', parent).click(function(){
 			_sendDonation.apply(this, [$('.prompt-input', parent).val()]);
@@ -36,46 +37,39 @@
 	 * because of jsonp. Also, this must be done in GET becaus of jsonp as well.
 	 */
 	function _sendDonation(value) {
+		var that = this;
 		$.ajax({
 			url: this.donationUrl,
 			dataType: 'jsonp',
 			data: {value: value, cause: this.cause},
 			complete: function(json) {
-				translations = json.responseJSON;
-			}
-		});
-	}
-
-	function _loadTranslations(url, doneCallback) {
-		_incomingTranslations = true;
-		$.ajax({
-			url: url,
-			dataType: 'jsonp',
-			complete: function(json) {
-				translations = json.responseJSON;
-				_incomingTranslations = false;
-				doneCallback();
+				_fetchStats.apply(that);
 			}
 		});
 	}
 
 	/**
+	 * Private method to fetch the stats from the server.
+	 */
+	function _fetchStats() {
+		var statsContainer = $('.prompt-stats .value', this.parent);
+		if (statsContainer.length == 1) {
+			$.ajax({
+				url: this.statsUrl,
+				data: {cause: this.cause},
+				dataType: 'jsonp'
+			})
+			.done(function(data) {
+				statsContainer.html(data);
+			});
+		}
+	}
+
+	/**
 	 * Private method to fetch the widget's stats in an interval of 10 seconds
 	 */
-	function _startStats(statsUrl) {
-		setInterval(function() {
-			var statsContainer = $('.prompt-stats .value', this.parent);
-			if (statsContainer.length == 1) {
-				$.ajax({
-					url: statsUrl,
-					data: {cause: this.cause},
-					dataType: 'jsonp'
-				})
-				.done(function(data) {
-					statsContainer.html(data);
-				});
-			}
-		}.bind(this), 1000);
+	function _startStats() {
+		setInterval(_fetchStats.bind(this), 10000);
 	}
 
 	/**
@@ -84,7 +78,7 @@
 	function _build(parent) {
 		var that = this;
 		if (_templates[this.templateUrl]) {
-			_loadTemplate.apply(that, [parent, _templates[this.templateUrl]]);
+			_compileTemplate.apply(that, [parent, _templates[this.templateUrl]]);
 		}
 		else {
 			$.ajax({
@@ -93,7 +87,7 @@
 			})
 			.done(function(tpl) {
 				_templates[that.templateUrl] = tpl;
-				_loadTemplate.apply(that, [parent, _templates[that.templateUrl]]);
+				_compileTemplate.apply(that, [parent, _templates[that.templateUrl]]);
 			});
 		}
 	}
@@ -109,23 +103,31 @@
 	var donate = function(parent, options) {
 		// Callback to built the widget and start the stats
 		var next = function() {
-			var locale = options.locale || 'en_GB';
-
-			this.parent = parent;
-			this.locale = locale;
-
-			this.cause = options.cause || '';
-			this.donationUrl = options.donationUrl || '';
-			this.templateUrl = options.templateUrl || '';
-
 			_build.apply(this, [parent]);
-			_startStats.apply(this, [options.statsUrl]);
+			_startStats.apply(this);
 		}.bind(this);
 
+		var locale = options.locale || 'en_GB';
+
+		// set some attributes
+		this.parent = parent;
+		this.locale = locale;
+
+		this.cause = options.cause || '';
+		this.donationUrl = options.donationUrl || '';
+		this.statsUrl = options.statsUrl || '';
+		this.templateUrl = options.templateUrl || '';
+
 		if (!translations && !_incomingTranslations) {
-			_loadTranslations(options.translationsUrl, next);
+			throw "Translations are needed to use the widget.";
 		}
-		else if (_incomingTranslations) {
+		// The translations are here, let's proceed
+		else if (!_incomingTranslations) {
+			next();
+		}
+		// Otherwise, if transactions are incoming, wait until they are here
+		// to build the widget
+		else {
 			var interval = setInterval(function() {
 				if (!_incomingTranslations) {
 					clearInterval(interval);
@@ -134,6 +136,21 @@
 			}, 50);
 		}
 	};
+
+	/**
+	 * Load the translations. To be called
+	 */
+	donate.loadTranslations = function(url) {
+		_incomingTranslations = true;
+		$.ajax({
+			url: url,
+			dataType: 'jsonp',
+			complete: function(json) {
+				translations = json.responseJSON;
+				_incomingTranslations = false;
+			}
+		});
+	}
 
 	window.Donate = donate;
 })();

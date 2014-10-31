@@ -23,6 +23,7 @@
 			{locale: this.locale, translations: translations[this.locale]}
 		);
 		$(parent).html(html);
+		_fetchStats.apply(this);
 
 		$('.add-donation-button', parent).click(function(){
 			_sendDonation.apply(this, [$('.prompt-input', parent).val()]);
@@ -36,32 +37,39 @@
 	 * because of jsonp. Also, this must be done in GET becaus of jsonp as well.
 	 */
 	function _sendDonation(value) {
+		var that = this;
 		$.ajax({
 			url: this.donationUrl,
 			dataType: 'jsonp',
 			data: {value: value, cause: this.cause},
 			complete: function(json) {
+				_fetchStats.apply(that);
 			}
 		});
 	}
 
 	/**
+	 * Private method to fetch the stats from the server.
+	 */
+	function _fetchStats() {
+		var statsContainer = $('.prompt-stats .value', this.parent);
+		if (statsContainer.length == 1) {
+			$.ajax({
+				url: this.statsUrl,
+				data: {cause: this.cause},
+				dataType: 'jsonp'
+			})
+			.done(function(data) {
+				statsContainer.html(data);
+			});
+		}
+	}
+
+	/**
 	 * Private method to fetch the widget's stats in an interval of 10 seconds
 	 */
-	function _startStats(statsUrl) {
-		setInterval(function() {
-			var statsContainer = $('.prompt-stats .value', this.parent);
-			if (statsContainer.length == 1) {
-				$.ajax({
-					url: statsUrl,
-					data: {cause: this.cause},
-					dataType: 'jsonp'
-				})
-				.done(function(data) {
-					statsContainer.html(data);
-				});
-			}
-		}.bind(this), 1000);
+	function _startStats() {
+		setInterval(_fetchStats.bind(this), 10000);
 	}
 
 	/**

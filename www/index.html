@@ -16,30 +16,30 @@
 				$('#prompt'),
 				{
 					locale: 'en_GB',
+					cause: 'llama',
 					socketUrl: 'http://127.0.0.1:3000',
 					templateUrl: 'templates/template-llama.html',
-					cause: 'llama',
-					donationUrl: 'http://127.0.0.1:3000/donation',
+					donationUrl: 'http://127.0.0.1:3000/donation'
 				}
 			);
 			var d2 = new Donate(
 				$('#prompt-cancer-fr'),
 				{
 					locale: 'fr_FR',
+					cause: 'cancer',
 					socketUrl: 'http://127.0.0.1:3000',
 					templateUrl: 'templates/template-cancer.html',
-					cause: 'cancer',
-					donationUrl: 'http://127.0.0.1:3000/donation',
+					donationUrl: 'http://127.0.0.1:3000/donation'
 				}
 			);
 			var d3 = new Donate(
 				$('#prompt-cancer-en'),
 				{
 					locale: 'en_GB',
+					cause: 'cancer',
 					socketUrl: 'http://127.0.0.1:3000',
 					templateUrl: 'templates/template-cancer.html',
-					cause: 'cancer',
-					donationUrl: 'http://127.0.0.1:3000/donation',
+					donationUrl: 'http://127.0.0.1:3000/donation'
 				}
 			);
 		});

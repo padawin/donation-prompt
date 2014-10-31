@@ -46,19 +46,6 @@
 		});
 	}
 
-	function _loadTranslations(url, doneCallback) {
-		_incomingTranslations = true;
-		$.ajax({
-			url: url,
-			dataType: 'jsonp',
-			complete: function(json) {
-				translations = json.responseJSON;
-				_incomingTranslations = false;
-				doneCallback();
-			}
-		});
-	}
-
 	/**
 	 * Private method to fetch the widget's stats in an interval of 10 seconds
 	 */
@@ -123,9 +110,15 @@
 		}.bind(this);
 
 		if (!translations && !_incomingTranslations) {
-			_loadTranslations(options.translationsUrl, next);
+			throw "Translations are needed to use the widget.";
 		}
-		else if (_incomingTranslations) {
+		// The translations are here, let's proceed
+		else if (!_incomingTranslations) {
+			next();
+		}
+		// Otherwise, if transactions are incoming, wait until they are here
+		// to build the widget
+		else {
 			var interval = setInterval(function() {
 				if (!_incomingTranslations) {
 					clearInterval(interval);
@@ -134,6 +127,21 @@
 			}, 50);
 		}
 	};
+
+	/**
+	 * Load the translations. To be called
+	 */
+	donate.loadTranslations = function(url) {
+		_incomingTranslations = true;
+		$.ajax({
+			url: url,
+			dataType: 'jsonp',
+			complete: function(json) {
+				translations = json.responseJSON;
+				_incomingTranslations = false;
+			}
+		});
+	}
 
 	window.Donate = donate;
 })();

@@ -23,7 +23,10 @@
 			{locale: this.locale, translations: _translations[this.locale]}
 		);
 		$(parent).html(html);
-		_fetchStats.apply(this);
+		this.socket.on('stats', function(data) {
+			$('.prompt-stats .value', that.parent).html(data);
+		});
+		this.socket.emit('stats', this.cause);
 
 		$('.add-donation-button', parent).click(function(){
 			_sendDonation.apply(this, [$('.prompt-input', parent).val()]);
@@ -43,33 +46,8 @@
 			dataType: 'jsonp',
 			data: {value: value, cause: this.cause},
 			complete: function(json) {
-				_fetchStats.apply(that);
 			}
 		});
-	}
-
-	/**
-	 * Private method to fetch the stats from the server.
-	 */
-	function _fetchStats() {
-		var statsContainer = $('.prompt-stats .value', this.parent);
-		if (statsContainer.length == 1) {
-			$.ajax({
-				url: this.statsUrl,
-				data: {cause: this.cause},
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				statsContainer.html(data);
-			});
-		}
-	}
-
-	/**
-	 * Private method to fetch the widget's stats in an interval of 10 seconds
-	 */
-	function _startStats() {
-		setInterval(_fetchStats.bind(this), 10000);
 	}
 
 	/**
@@ -120,8 +98,15 @@
 	var donate = function(parent, options) {
 		// Callback to built the widget and start the stats
 		var next = function() {
+			this.socket = new io.connect(
+				this.socketUrl,
+				{
+					resource: 'A/socket.io',
+					'force new connection': true,
+					query: "cause=" + this.cause
+				}
+			);
 			_build.apply(this, [parent]);
-			_startStats.apply(this);
 		}.bind(this);
 
 		var locale = options.locale || 'en_GB';
@@ -132,7 +117,7 @@
 
 		this.cause = options.cause || '';
 		this.donationUrl = options.donationUrl || '';
-		this.statsUrl = options.statsUrl || '';
+		this.socketUrl = options.socketUrl || '';
 		this.templateUrl = options.templateUrl || '';
 
 		if (!_translations && !_incomingTranslations) {

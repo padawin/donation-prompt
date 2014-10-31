@@ -16,6 +16,10 @@ var donate = {
 	 * Method to get the number of donations for a given cause
 	 */
 	getDonations: function(cause) {
+		if (!cause) {
+			throw "Empty cause";
+		}
+
 		if (_donations[cause]) {
 			return _donations[cause].length;
 		}

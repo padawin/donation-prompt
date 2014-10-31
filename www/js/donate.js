@@ -37,19 +37,19 @@
 		}.bind(this), 1000);
 	}
 
-	function _build(parent, templateUrl, translations) {
+	function _build(parent) {
 		var that = this;
-		if (_templates[templateUrl]) {
-			_loadTemplate.apply(that, [parent, _templates[templateUrl]]);
+		if (_templates[this.templateUrl]) {
+			_loadTemplate.apply(that, [parent, _templates[this.templateUrl]]);
 		}
 		else {
 			$.ajax({
-				url: templateUrl,
+				url: this.templateUrl,
 				dataType: 'html'
 			})
 			.done(function(tpl) {
-				_templates[templateUrl] = tpl;
-				_loadTemplate.apply(that, [parent, _templates[templateUrl]]);
+				_templates[that.templateUrl] = tpl;
+				_loadTemplate.apply(that, [parent, _templates[that.templateUrl]]);
 			});
 		}
 	}
@@ -61,8 +61,8 @@
 			this.parent = parent;
 			this.locale = locale;
 
-			var templateUrl = options.templateUrl || '';
-			_build.apply(this, [parent, templateUrl]);
+			this.templateUrl = options.templateUrl || '';
+			_build.apply(this, [parent]);
 			_startStats.apply(this, [options.statsUrl]);
 		}.bind(this);
 

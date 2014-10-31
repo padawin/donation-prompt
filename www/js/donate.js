@@ -41,7 +41,6 @@
 			dataType: 'jsonp',
 			data: {value: value, cause: this.cause},
 			complete: function(json) {
-				translations = json.responseJSON;
 			}
 		});
 	}

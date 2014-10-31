@@ -22,9 +22,19 @@
 				}
 			);
 			var d2 = new Donate(
-				$('#prompt-fr'),
+				$('#prompt-cancer-fr'),
 				{
 					locale: 'fr_FR',
+					templateUrl: 'templates/template-cancer.html',
+					cause: 'cancer',
+					donationUrl: 'http://127.0.0.1:3000/donation',
+					statsUrl: 'http://127.0.0.1:3000/stats.json'
+				}
+			);
+			var d3 = new Donate(
+				$('#prompt-cancer-en'),
+				{
+					locale: 'en_GB',
 					templateUrl: 'templates/template-cancer.html',
 					cause: 'cancer',
 					donationUrl: 'http://127.0.0.1:3000/donation',
@@ -36,6 +46,7 @@
 	</head>
 	<body>
 		<div id="prompt"></div>
-		<div id="prompt-fr"></div>
+		<div id="prompt-cancer-fr"></div>
+		<div id="prompt-cancer-en"></div>
 	</body>
 </head>

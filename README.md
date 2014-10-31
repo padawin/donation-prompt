@@ -17,3 +17,9 @@ node server.js
 ```
 
 Then open www/index.html in your favourite browser.
+
+## Tests
+
+```
+nodeunit tests/test-donation.js
+```

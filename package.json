@@ -7,7 +7,6 @@
 	},
 	"dependencies": {
 		"qunitjs": "~1.15.0",
-		"mustache": "0.8.2",
 		"express": "4.x"
 	}
 }

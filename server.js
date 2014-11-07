@@ -4,7 +4,6 @@ var io = require('socket.io')(http);
 var donate = require('./modules/donate');
 
 app.get('/public/*', function (req, res) {
-	console.log(req.params[0], __dirname + '/www/');
 	res.sendFile(
 		req.params[0],
 		{

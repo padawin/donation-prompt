@@ -16,7 +16,7 @@ bower install
 node server.js
 ```
 
-Then open www/index.html in your favourite browser.
+Then open http://localhost:3000/public/index.html in your favourite browser.
 
 ## Tests
 

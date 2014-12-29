@@ -13,6 +13,10 @@ app.get('/public/*', function (req, res) {
 	);
 });
 
+app.get('/public', function(req, res){
+	res.redirect('/public/');
+});
+
 
 /**
  * Route to get the available translations, per locale.
